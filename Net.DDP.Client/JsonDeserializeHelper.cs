@@ -40,6 +40,14 @@ namespace Net.DDP.Client
                 entity.result= jObj["result"].ToString();
                 this._subscriber.DataReceived(entity);
             }
+            else if (jObj["error"] != null)
+            {
+                dynamic entity = new ExpandoObject();
+                entity.type = "error";
+                entity.requestingId = jObj["id"].ToString();
+                entity.error = jObj["error"].ToString();
+                this._subscriber.DataReceived(entity);
+            }
         }
 
         private dynamic GetData(JObject json)

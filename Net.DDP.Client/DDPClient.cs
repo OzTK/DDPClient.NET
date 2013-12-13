@@ -31,7 +31,7 @@ namespace Net.DDP.Client
 
         public void Call(string methodName, params string[] args)
         {
-            string message = string.Format("\"msg\": \"method\",\"method\": \"{0}\",\"params\": [{1}],\"id\": \"{2}\"", methodName,this.CreateJSonArray(args), this.NextId().ToString());
+            string message = string.Format("\"msg\": \"method\",\"method\": \"{0}\",\"params\": [{1}],\"id\": \"{2}\"", methodName, this.CreateJSonArray(args), this.NextId().ToString());
             message = "{" + message+ "}";
             _connector.Send(message);
         }
@@ -54,10 +54,10 @@ namespace Net.DDP.Client
             for (int i = 0; i < args.Length; i++)
             {
                 argumentBuilder.Append(delimiter);
-                argumentBuilder.Append(string.Format("\"{0}\"",args[i]));
+                argumentBuilder.Append(args[i]);
                 delimiter = ",";
             }
-
+            
             return argumentBuilder.ToString();
         }
         private int NextId()

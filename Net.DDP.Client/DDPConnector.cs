@@ -21,7 +21,7 @@ namespace Net.DDP.Client
 
         public void Connect(string url)
         {
-            _url = "ws://" + url + "/websocket";
+            _url = "wss://" + url + "/websocket";
             _socket = new WebSocket(_url);
             _socket.MessageReceived += new EventHandler<MessageReceivedEventArgs>(socket_MessageReceived);
             _socket.Opened += new EventHandler(_socket_Opened);
@@ -42,7 +42,7 @@ namespace Net.DDP.Client
 
         void _socket_Opened(object sender, EventArgs e)
         {
-            this.Send("{\"msg\":\"connect\"}");
+            this.Send("{\"msg\":\"connect\",\"version\":\"pre1\",\"support\":[\"pre1\"]}");
             _isWait = 0;
         }
 
