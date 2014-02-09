@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using WebSocket4Net;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
 namespace Net.DDP.Client
 {
     internal class DDPConnector
     {
         private WebSocket _socket;
         private string _url=string.Empty;
-        private int _isWait = 0;
-        private IClient _client;
+        private int _isWait;
+        private readonly IClient _client;
 
         public DDPConnector(IClient client)
         {
@@ -23,8 +19,8 @@ namespace Net.DDP.Client
         {
             _url = "wss://" + url + "/websocket";
             _socket = new WebSocket(_url);
-            _socket.MessageReceived += new EventHandler<MessageReceivedEventArgs>(socket_MessageReceived);
-            _socket.Opened += new EventHandler(_socket_Opened);
+            _socket.MessageReceived += socket_MessageReceived;
+            _socket.Opened += _socket_Opened;
             _socket.Open();
             _isWait = 1;
             this.Wait();

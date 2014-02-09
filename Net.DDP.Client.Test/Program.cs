@@ -3,42 +3,46 @@ using System.Collections.Generic;
 
 namespace Net.DDP.Client.Test
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
+            // Testing by listing all atmosphere packages
+            DDPClient client = new DDPClient(new Subscriber());
+            client.Connect("atmosphere.meteor.com:443");
+            client.Subscribe("packages");
             Console.ReadLine();
         }
     }
 
-    public class Subscriber:IDataSubscriber
+    public class Subscriber : IDataSubscriber
     {
-        private IList<String> _ids = new List<String>();
+        // Atmosphere packages list
+        private List<String> _packages = new List<String>();
+        private string _sessionId;
 
         public void DataReceived(dynamic data)
         {
             try
             {
-                if (data.type == "sub")
+                // Handling connection to server
+                if (data.type == DDPClient.DDP_TYPE_CONNECTED)
                 {
-                    Console.WriteLine(data.prodCode + ": " + data.prodName + ": collection: " + data.collection);
-                    _ids.Add((string)data.id);
+                    _sessionId = data.session;
+                    Console.WriteLine("Connected! Session id: " + _sessionId);
                 }
-                else if (data.type == "unset")
+                else if (data.type == DDPClient.DDP_TYPE_ADDED) // Handling added event
                 {
-                    foreach (string item in _ids)
-                    {
-                        if (item == data.id)
-                            Console.WriteLine("deleleted item with id: " + data.id);
-                    }
+                    _packages.Add(data.name);
+                    Console.Write(data.name + ", ");
                 }
-                else if (data.type == "method")
-                    Console.WriteLine(data.result);
             }
             catch(Exception ex)
             {
-                throw;
+                Console.WriteLine("Error trying to parse data");
             }
         }
+
+        public string Session { get; set; }
     }
 }

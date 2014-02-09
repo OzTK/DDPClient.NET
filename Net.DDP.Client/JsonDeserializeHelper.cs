@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Dynamic;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+
 namespace Net.DDP.Client
 {
     internal class JsonDeserializeHelper
     {
-        private IDataSubscriber _subscriber;
+        private readonly IDataSubscriber _subscriber;
 
         public JsonDeserializeHelper(IDataSubscriber subscriber)
         {
-            this._subscriber = subscriber;
+            _subscriber = subscriber;
         }
 
         internal void Deserialize(string jsonItem)
@@ -21,16 +19,16 @@ namespace Net.DDP.Client
             JObject jObj = JObject.Parse(jsonItem);
             if (jObj["set"]!=null)
             {
-                dynamic d= this.GetData(jObj);
+                dynamic d= GetData(jObj);
                 d.type= "sub";
-                this._subscriber.DataReceived(d);
+                _subscriber.DataReceived(d);
             }
             else if (jObj["unset"]!=null)
             {
                 dynamic entity = new ExpandoObject();
                 entity.type="unset";
                 entity.id= jObj["id"].ToString();
-                this._subscriber.DataReceived(entity);
+                _subscriber.DataReceived(entity);
             }
             else if (jObj["result"]!=null)
             {
@@ -38,7 +36,7 @@ namespace Net.DDP.Client
                 entity.type= "method";
                 entity.requestingId=jObj["id"].ToString();
                 entity.result= jObj["result"].ToString();
-                this._subscriber.DataReceived(entity);
+                _subscriber.DataReceived(entity);
             }
             else if (jObj["error"] != null)
             {
@@ -46,19 +44,37 @@ namespace Net.DDP.Client
                 entity.type = "error";
                 entity.requestingId = jObj["id"].ToString();
                 entity.error = jObj["error"].ToString();
-                this._subscriber.DataReceived(entity);
+                _subscriber.DataReceived(entity);
+            }
+            else if (jObj[DDPClient.DDP_PROPS_MESSAGE] != null)
+            {
+                dynamic entity;
+                if (jObj[DDPClient.DDP_PROPS_COLLECTION] != null)
+                    entity = GetData(jObj);
+                else if (jObj[DDPClient.DDP_PROPS_SESSION] != null)
+                {
+                    entity = new ExpandoObject();
+                    entity.Session = jObj[DDPClient.DDP_PROPS_SESSION].ToString();
+                }
+                else
+                {
+                    entity = new ExpandoObject();
+                }
+                entity.type = jObj[DDPClient.DDP_PROPS_MESSAGE].ToString();
+
+                _subscriber.DataReceived(entity);
             }
         }
 
         private dynamic GetData(JObject json)
         {
             dynamic entity = new ExpandoObject();
-            ((IDictionary<string, object>)entity).Add("id", json["id"].ToString());
-            entity.collection= json["collection"].ToString();
-            JObject tmp = (JObject)json["set"];
+            ((IDictionary<string, object>)entity).Add("Id", json[DDPClient.DDP_PROPS_ID].ToString());
+            entity.Collection = json[DDPClient.DDP_PROPS_ID].ToString();
+            var tmp = (JObject)json[DDPClient.DDP_PROPS_FIELDS];
             foreach (var item in tmp)
-                ((IDictionary<string, object>)entity).Add(item.Key, item.Value.ToString());
-                
+                ((IDictionary<string, object>)entity).Add(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(item.Key), item.Value.ToString());
+
             return entity;
         }
     }
