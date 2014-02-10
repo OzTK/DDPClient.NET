@@ -1,8 +1,11 @@
-
 *DDP Client for .NET*
 
 DDPClient.NET is a library to connect to DDP server. DDP is the protocol used in Meteor. Using DDPClient.NET you can subscribe to published items or call a Meteor method and display the same in your ASP.NET or Desktop applications.
 
+*NuGet package*
+You can easily install DDPClient via NuGet:
+<pre><code>Install-Package DDPClient.Net</code></pre>
+NuGet page: http://www.nuget.org/packages/DDPClient.Net/
 
 *How to Subscribe to a published item*
 
