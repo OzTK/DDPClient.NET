@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>DDPClient.Net</id>
+    <version>0.1.0</version>
+    <title>DDPClient.Net</title>
+    <authors>Paul Duguet</authors>
+    <owners></owners>
+    <description>
+      DDP client library for .NET for use with Meteor's ddp protocol. Still in an early version and allowing only basic subscriptions and calls. This project was originally started by Sony Arouje : https://github.com/sonyarouje/DDPClient.NET
+    </description>
+    <releaseNotes>
+    </releaseNotes>
+    <summary>
+      DDP client library for .NET
+    </summary>
+    <language>en-US</language>
+    <projectUrl>https://github.com/OzTK/DDPClient.NET</projectUrl>
+    <iconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>http://opensource.org/licenses/Apache-2.0</licenseUrl>
+    <dependencies>
+        <group targetFramework="net40">
+          <dependency id="Newtonsoft.Json" version="6.0.1" />
+          <dependency id="WebSocket4Net" version="0.8.0" />
+        </group>
+    </dependencies>
+    <references></references>
+    <tags>DDP DDPClient Meteor</tags>
+  </metadata>
+  <files>
+    <file src="lib\" target="lib" />
+    <file src="tools\" target="tools" />
+    <file src="content\" target="content" />
+  </files>
+</package>

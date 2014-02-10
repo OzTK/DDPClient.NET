@@ -28,13 +28,13 @@ namespace Net.DDP.Client.Test
                 // Handling connection to server
                 if (data.type == DDPClient.DDP_TYPE_CONNECTED)
                 {
-                    _sessionId = data.session;
+                    _sessionId = data.Session;
                     Console.WriteLine("Connected! Session id: " + _sessionId);
                 }
                 else if (data.type == DDPClient.DDP_TYPE_ADDED) // Handling added event
                 {
-                    _packages.Add(data.name);
-                    Console.Write(data.name + ", ");
+                    _packages.Add(data.Name);
+                    Console.Write(data.Name + ", ");
                 }
             }
             catch(Exception ex)
