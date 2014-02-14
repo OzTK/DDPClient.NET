@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>DDPClient.Net</id>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <title>DDPClient.Net</title>
     <authors>Paul Duguet</authors>
     <owners></owners>

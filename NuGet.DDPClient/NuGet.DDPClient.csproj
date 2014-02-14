@@ -63,9 +63,7 @@
     <Folder Include="src\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Net.DDP.Client\bin\Release\DDPClient.Net.dll">
-      <Link>lib\DDPClient.Net.dll</Link>
-    </Content>
+    <Content Include="lib\DDPClient.Net.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
