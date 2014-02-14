@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>DDPClient.Net</id>
-    <version>0.2.1</version>
+    <version>0.2.2</version>
     <title>DDPClient.Net</title>
     <authors>Paul Duguet</authors>
     <owners></owners>
@@ -10,6 +10,7 @@
       DDP client library for .NET for use with Meteor's ddp protocol. Still in an early version and allowing only basic subscriptions and calls. This project was originally started by Sony Arouje : https://github.com/sonyarouje/DDPClient.NET
     </description>
     <releaseNotes>
+      Correcting Collection property (id was place in it instead of collection name)
     </releaseNotes>
     <summary>
       DDP client library for .NET

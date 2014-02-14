@@ -165,3 +165,4 @@ pip-log.txt
 NuGet.DDPClient/NuGet.log
 NuGet.DDPClient/DDPClient.Net.0.1.0.nupkg
 *.nupkg
+NuGet.DDPClient/NuGet.log
