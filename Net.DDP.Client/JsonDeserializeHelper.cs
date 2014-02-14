@@ -72,7 +72,7 @@ namespace Net.DDP.Client
             var tmp = (JObject)json[DDPClient.DDP_PROPS_FIELDS];
             dynamic entity = GetDataRecursive(tmp);
             ((IDictionary<string, object>)entity).Add("Id", json[DDPClient.DDP_PROPS_ID].ToString());
-            entity.Collection = json[DDPClient.DDP_PROPS_ID].ToString();
+            entity.Collection = json["collection"].ToString();
             
             return entity;
         }
