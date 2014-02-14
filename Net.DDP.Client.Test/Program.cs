@@ -26,12 +26,12 @@ namespace Net.DDP.Client.Test
             try
             {
                 // Handling connection to server
-                if (data.type == DDPClient.DDP_TYPE_CONNECTED)
+                if (data.Type == DDPClient.DDP_TYPE_CONNECTED)
                 {
                     _sessionId = data.Session;
                     Console.WriteLine("Connected! Session id: " + _sessionId);
                 }
-                else if (data.type == DDPClient.DDP_TYPE_ADDED) // Handling added event
+                else if (data.Type == DDPClient.DDP_TYPE_ADDED) // Handling added event
                 {
                     _packages.Add(data.Name);
                     Console.Write(data.Name + ", ");

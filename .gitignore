@@ -161,3 +161,7 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+NuGet.DDPClient/NuGet.log
+NuGet.DDPClient/DDPClient.Net.0.1.0.nupkg
+*.nupkg
