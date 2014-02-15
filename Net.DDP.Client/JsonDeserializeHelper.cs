@@ -39,12 +39,11 @@ namespace Net.DDP.Client
                 entity.Result= jObj["result"].ToString();
                 _subscriber.DataReceived(entity);
             }
-            else if (jObj["error"] != null)
+            else if (jObj["msg"] != null && jObj["msg"].ToString() == DDPClient.DDP_TYPE_ERROR)
             {
                 dynamic entity = new ExpandoObject();
                 entity.Type = "error";
-                entity.RequestingId = jObj["id"].ToString();
-                entity.Error = jObj["error"].ToString();
+                entity.Error = jObj["reason"].ToString();
                 _subscriber.DataReceived(entity);
             }
             else if (jObj[DDPClient.DDP_PROPS_MESSAGE] != null)

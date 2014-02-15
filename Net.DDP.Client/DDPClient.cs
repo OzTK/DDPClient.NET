@@ -7,6 +7,7 @@ namespace Net.DDP.Client
         public const string DDP_TYPE_CONNECTED = "connected";
         public const string DDP_TYPE_READY = "ready";
         public const string DDP_TYPE_ADDED = "added";
+        public const string DDP_TYPE_ERROR = "error";
 
         public const string DDP_PROPS_MESSAGE = "msg";
         public const string DDP_PROPS_ID = "id";
@@ -44,7 +45,7 @@ namespace Net.DDP.Client
 
         public int Subscribe(string subscribeTo, params string[] args)
         {
-            string message = string.Format("\"msg\": \"sub\",\"name\": \"{0}\",\"params\": [{1}],\"id\": \"{2}\"", subscribeTo,CreateJSonArray(args), NextId());
+            string message = string.Format("\"msg\": \"sub\",\"name\": \"{0}\",\"params\": [{1}],\"id\": \"{2}\"", subscribeTo, CreateJSonArray(args), NextId());
             message = "{" + message + "}";
             _connector.Send(message);
             return GetCurrentRequestId();
@@ -60,7 +61,7 @@ namespace Net.DDP.Client
             for (int i = 0; i < args.Length; i++)
             {
                 argumentBuilder.Append(delimiter);
-                argumentBuilder.Append(args[i]);
+                argumentBuilder.AppendFormat("\"{0}\"", args[i]);
                 delimiter = ",";
             }
             

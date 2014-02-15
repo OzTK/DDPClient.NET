@@ -36,6 +36,10 @@ namespace Net.DDP.Client.Test
                     _packages.Add(data.Name);
                     Console.Write(data.Name + ", ");
                 }
+                else if (data.Type == DDPClient.DDP_ERROR)
+                {
+                    Console.WriteLine("Error: " + data.Error);
+                }
             }
             catch(Exception ex)
             {
