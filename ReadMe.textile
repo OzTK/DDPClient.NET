@@ -27,9 +27,9 @@ It is very easy with the help of DDPClient.NET. See the code below.
         {
             try
             {
-                if (data.type == "sub")
+                if (data.Type == DDPType.Added)
                 {
-                    Console.WriteLine(data.prodCode + ": " + data.prodName + ": collection: " + data.collection);
+                    Console.WriteLine(data.ProdCode + ": " + data.ProdName + ": collection: " + data.Collection);
                 }
             }
             catch(Exception ex)
@@ -74,8 +74,8 @@ Let's see how to invoke a method in Meteor.
         {
             try
             {
-                if (data.type == "method")
-                    Console.WriteLine(data.result);
+                if (data.Type == DDPType.MethodResult)
+                    Console.WriteLine(data.Result);
             }
             catch(Exception ex)
             {
