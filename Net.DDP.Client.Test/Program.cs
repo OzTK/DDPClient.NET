@@ -18,27 +18,34 @@ namespace Net.DDP.Client.Test
     public class Subscriber : IDataSubscriber
     {
         // Atmosphere packages list
-        private List<String> _packages = new List<String>();
-        private string _sessionId;
-
+        private readonly List<String> _packages = new List<String>();
+        public string Session { get; set; }
         public void DataReceived(dynamic data)
         {
             try
             {
                 // Handling connection to server
-                if (data.Type == DDPClient.DDP_TYPE_CONNECTED)
+                if (data.Type == DDPType.Connected)
                 {
-                    _sessionId = data.Session;
-                    Console.WriteLine("Connected! Session id: " + _sessionId);
+                    Session = data.Session;
+                    Console.WriteLine("Connected! Session id: " + Session);
                 }
-                else if (data.Type == DDPClient.DDP_TYPE_ADDED) // Handling added event
+                else if (data.Type == DDPType.Added) // Handling added event
                 {
                     _packages.Add(data.Name);
                     Console.Write(data.Name + ", ");
                 }
-                else if (data.Type == DDPClient.DDP_ERROR)
+                else if (data.Type == DDPType.Changed) // Handling added event
+                {
+                    Console.WriteLine("Package " + data.Name + " was modified");
+                }
+                else if (data.Type == DDPType.Error)
                 {
                     Console.WriteLine("Error: " + data.Error);
+                }
+                else if (data.Type == DDPType.Ready)
+                {
+                    Console.WriteLine("Collections " + data.RequestsIds[0] + " loaded!");
                 }
             }
             catch(Exception ex)
@@ -46,7 +53,5 @@ namespace Net.DDP.Client.Test
                 Console.WriteLine("Error trying to parse data");
             }
         }
-
-        public string Session { get; set; }
     }
 }

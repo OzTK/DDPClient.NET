@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="DDPClient.cs" />
     <Compile Include="DDPConnector.cs" />
+    <Compile Include="DDPType.cs" />
     <Compile Include="IClient.cs" />
     <Compile Include="IDataSubscriber.cs" />
     <Compile Include="JsonDeserializeHelper.cs" />

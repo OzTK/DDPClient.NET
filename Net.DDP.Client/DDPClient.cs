@@ -4,16 +4,19 @@ namespace Net.DDP.Client
 {
     public class DDPClient : IClient
     {
-        public const string DDP_TYPE_CONNECTED = "connected";
-        public const string DDP_TYPE_READY = "ready";
-        public const string DDP_TYPE_ADDED = "added";
-        public const string DDP_TYPE_ERROR = "error";
+        public const string DDP_MESSAGE_TYPE_READY = "ready";
+        public const string DDP_MESSAGE_TYPE_ADDED = "added";
+        public const string DDP_MESSAGE_TYPE_CHANGED = "changed";
+        public const string DDP_MESSAGE_TYPE_NOSUB = "nosub";
 
         public const string DDP_PROPS_MESSAGE = "msg";
         public const string DDP_PROPS_ID = "id";
         public const string DDP_PROPS_COLLECTION = "collection";
         public const string DDP_PROPS_FIELDS = "fields";
         public const string DDP_PROPS_SESSION = "session";
+        public const string DDP_PROPS_RESULT = "result";
+        public const string DDP_PROPS_ERROR = "error";
+        public const string DDP_PROPS_SUBS = "subs";
 
         private readonly DDPConnector _connector;
         private int _uniqueId;

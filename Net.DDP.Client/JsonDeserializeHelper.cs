@@ -18,73 +18,95 @@ namespace Net.DDP.Client
         internal void Deserialize(string jsonItem)
         {
             JObject jObj = JObject.Parse(jsonItem);
-            if (jObj["set"]!=null)
-            {
-                dynamic d = GetData(jObj);
-                d.Type= "sub";
-                _subscriber.DataReceived(d);
-            }
-            else if (jObj["unset"]!=null)
-            {
-                dynamic entity = new ExpandoObject();
-                entity.Type="unset";
-                entity.Id= jObj["id"].ToString();
-                _subscriber.DataReceived(entity);
-            }
-            else if (jObj["result"]!=null)
-            {
-                dynamic entity = new ExpandoObject();
-                entity.Type= "method";
-                entity.RequestingId=jObj["id"].ToString();
-                entity.Result= jObj["result"].ToString();
-                _subscriber.DataReceived(entity);
-            }
-            else if (jObj["msg"] != null && jObj["msg"].ToString() == DDPClient.DDP_TYPE_ERROR)
-            {
-                dynamic entity = new ExpandoObject();
-                entity.Type = "error";
-                entity.Error = jObj["reason"].ToString();
-                _subscriber.DataReceived(entity);
-            }
-            else if (jObj[DDPClient.DDP_PROPS_MESSAGE] != null)
-            {
-                dynamic entity;
-                if (jObj[DDPClient.DDP_PROPS_COLLECTION] != null)
-                    entity = GetData(jObj);
-                else if (jObj[DDPClient.DDP_PROPS_SESSION] != null)
-                {
-                    entity = new ExpandoObject();
-                    entity.Session = jObj[DDPClient.DDP_PROPS_SESSION].ToString();
-                }
-                else
-                {
-                    entity = new ExpandoObject();
-                }
-                entity.Type = jObj[DDPClient.DDP_PROPS_MESSAGE].ToString();
 
-                _subscriber.DataReceived(entity);
-            }
+            if (jObj[DDPClient.DDP_PROPS_ERROR] != null || jObj[DDPClient.DDP_PROPS_MESSAGE] != null && jObj[DDPClient.DDP_PROPS_MESSAGE].ToString() == "error")
+                HandleError(jObj[DDPClient.DDP_PROPS_ERROR] ?? jObj);
+            else if (jObj[DDPClient.DDP_PROPS_SESSION] != null)
+                HandleConnected(jObj);
+            else if (jObj[DDPClient.DDP_PROPS_MESSAGE] != null)
+                HandleSubResult(jObj);
+            else if (jObj[DDPClient.DDP_PROPS_RESULT] != null)
+                HandleMethodResult(jObj);
         }
 
-        private dynamic GetData(JObject json)
+        private void HandleConnected(JObject jObj)
+        {
+            dynamic entity = new ExpandoObject();
+            entity.Session = jObj[DDPClient.DDP_PROPS_SESSION].ToString();
+            entity.Type = DDPType.Connected;
+
+            _subscriber.DataReceived(entity);
+        }
+
+        private void HandleError(JToken jError)
+        {
+            dynamic entity = new ExpandoObject();
+            entity.Type = DDPType.Error;
+            entity.Error = jError["reason"].ToString();
+
+            if (jError["error"] != null)
+                entity.Code = jError["error"];
+            if (jError["message"] != null)
+                entity.Message = jError["message"];
+        }
+
+        private void HandleMethodResult(JObject jObj)
+        {
+            dynamic entity = new ExpandoObject();
+            entity.Type = DDPType.MethodResult;
+            entity.RequestingId = jObj["id"].ToString();
+            entity.Result = jObj[DDPClient.DDP_PROPS_RESULT].ToString();
+            _subscriber.DataReceived(entity);
+        }
+
+        private void HandleSubResult(JObject jObj)
+        {
+            dynamic entity = new ExpandoObject();
+
+            if (jObj[DDPClient.DDP_PROPS_MESSAGE].ToString() == DDPClient.DDP_MESSAGE_TYPE_ADDED)
+            {
+                entity = GetMessageData(jObj);
+
+                entity.Type = DDPType.Added;
+            }
+            else if (jObj[DDPClient.DDP_PROPS_MESSAGE].ToString() == DDPClient.DDP_MESSAGE_TYPE_CHANGED)
+            {
+                entity = GetMessageData(jObj);
+                entity.Type = DDPType.Changed;
+            }
+            else if (jObj[DDPClient.DDP_PROPS_MESSAGE].ToString() == DDPClient.DDP_MESSAGE_TYPE_NOSUB)
+            {
+                HandleError(jObj[DDPClient.DDP_PROPS_ERROR]);
+            }
+            else if (jObj[DDPClient.DDP_PROPS_MESSAGE].ToString() == DDPClient.DDP_MESSAGE_TYPE_READY)
+            {
+                entity.RequestsIds = ((JArray)jObj[DDPClient.DDP_PROPS_SUBS]).Select(id => id.Value<int>()).ToArray();
+                entity.Type = DDPType.Ready;
+            }
+
+            _subscriber.DataReceived(entity);
+        }
+
+        private dynamic GetMessageData(JObject json)
         {
             var tmp = (JObject)json[DDPClient.DDP_PROPS_FIELDS];
-            dynamic entity = GetDataRecursive(tmp);
-            ((IDictionary<string, object>)entity).Add("Id", json[DDPClient.DDP_PROPS_ID].ToString());
-            entity.Collection = json["collection"].ToString();
+            dynamic entity = GetMessageDataRecursive(tmp);
+            entity.Id = json[DDPClient.DDP_PROPS_ID].ToString();
+            entity.Collection = json[DDPClient.DDP_PROPS_COLLECTION].ToString();
             
             return entity;
         }
 
-        private dynamic GetDataRecursive(JObject json)
+        private dynamic GetMessageDataRecursive(JObject json)
         {
             dynamic entity = new ExpandoObject();
             var entityAsCollection = (IDictionary<string, object>) entity;
+
             foreach (var item in json)
             {
                 string propertyName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(item.Key);
                 if (item.Value is JObject) // Property is an object
-                    entityAsCollection.Add(propertyName, GetDataRecursive((JObject) item.Value));
+                    entityAsCollection.Add(propertyName, GetMessageDataRecursive((JObject) item.Value));
                 else if (item.Value is JArray) // Property is an array...
                 {
                     JArray collection = (JArray) item.Value;
@@ -93,7 +115,7 @@ namespace Net.DDP.Client
                     if (collection[0] is JObject) // ... of objects
                     {
                         var entityCollection =
-                            (from JObject colObj in collection select GetDataRecursive(colObj)).ToList();
+                            (from JObject colObj in collection select GetMessageDataRecursive(colObj)).ToList();
 
                         entityAsCollection.Add(propertyName, entityCollection);
                     }
