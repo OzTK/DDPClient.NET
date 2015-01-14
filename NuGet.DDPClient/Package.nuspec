@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>DDPClient.Net</id>
-    <version>0.4</version>
+    <version>0.4.1</version>
     <title>DDPClient.Net</title>
     <authors>Paul Duguet, Sony Arouje, David Cornish</authors>
     <owners></owners>
