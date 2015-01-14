@@ -4,7 +4,7 @@
     {
         void AddItem(string jsonItem);
         void Connect(string url);
-        void Call(string methodName, params string[] args);
+        void Call(string methodName, params object[] args);
         int Subscribe(string methodName, params string[] args);
         int GetCurrentRequestId();
     }
