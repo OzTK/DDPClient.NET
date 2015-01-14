@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Net.DDP.Client
 {
@@ -45,10 +45,10 @@ namespace Net.DDP.Client
             _connector.Connect(url, useSSL);
         }
 
-        public void Call(string methodName, params string[] args)
+        public void Call(string methodName, params object[] args)
         {
-            string message = string.Format("\"msg\": \"method\",\"method\": \"{0}\",\"params\": [{1}],\"id\": \"{2}\"", methodName, CreateJSonArray(args), NextId());
-            message = "{" + message+ "}";
+            string message = string.Format("\"msg\": \"method\",\"method\": \"{0}\",\"params\": {1},\"id\": \"{2}\"", methodName, CreateJSonArray(args), NextId());
+            message = "{" + message + "}";
             _connector.Send(message);
         }
 
@@ -60,21 +60,12 @@ namespace Net.DDP.Client
             return GetCurrentRequestId();
         }
 
-        private string CreateJSonArray(params string[] args)
+        private string CreateJSonArray(params object[] args)
         {
             if (args == null)
-                return string.Empty;
-
-            StringBuilder argumentBuilder = new StringBuilder();
-            string delimiter=string.Empty;
-            for (int i = 0; i < args.Length; i++)
-            {
-                argumentBuilder.Append(delimiter);
-                argumentBuilder.AppendFormat("\"{0}\"", args[i]);
-                delimiter = ",";
-            }
+                return "[]";
             
-            return argumentBuilder.ToString();
+            return JsonConvert.SerializeObject(args);
         }
         private int NextId()
         {
