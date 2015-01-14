@@ -83,6 +83,11 @@ namespace Net.DDP.Client
                 entity.RequestsIds = ((JArray)jObj[DDPClient.DDP_PROPS_SUBS]).Select(id => id.Value<int>()).ToArray();
                 entity.Type = DDPType.Ready;
             }
+            else if (jObj[DDPClient.DDP_PROPS_MESSAGE].ToString() == DDPClient.DDP_MESSAGE_TYPE_REMOVED)
+            {
+                entity = GetMessageData(jObj);
+                entity.Type = DDPType.Removed;
+            }
 
             _subscriber.DataReceived(entity);
         }
@@ -101,6 +106,8 @@ namespace Net.DDP.Client
         {
             dynamic entity = new ExpandoObject();
             var entityAsCollection = (IDictionary<string, object>) entity;
+
+            if (json == null) return entityAsCollection;
 
             foreach (var item in json)
             {

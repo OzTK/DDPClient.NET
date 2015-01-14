@@ -8,6 +8,7 @@ namespace Net.DDP.Client
         public const string DDP_MESSAGE_TYPE_ADDED = "added";
         public const string DDP_MESSAGE_TYPE_CHANGED = "changed";
         public const string DDP_MESSAGE_TYPE_NOSUB = "nosub";
+        public const string DDP_MESSAGE_TYPE_REMOVED = "removed";
 
         public const string DDP_PROPS_MESSAGE = "msg";
         public const string DDP_PROPS_ID = "id";
