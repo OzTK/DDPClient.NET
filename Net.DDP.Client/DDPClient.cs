@@ -39,6 +39,11 @@ namespace Net.DDP.Client
             _connector.Connect(url);
         }
 
+        public void Connect(string url, bool useSSL)
+        {
+            _connector.Connect(url, useSSL);
+        }
+
         public void Call(string methodName, params string[] args)
         {
             string message = string.Format("\"msg\": \"method\",\"method\": \"{0}\",\"params\": [{1}],\"id\": \"{2}\"", methodName, CreateJSonArray(args), NextId());

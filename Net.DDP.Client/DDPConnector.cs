@@ -6,7 +6,7 @@ namespace Net.DDP.Client
     internal class DDPConnector
     {
         private WebSocket _socket;
-        private string _url=string.Empty;
+        private string _url = string.Empty;
         private int _isWait;
         private readonly IClient _client;
 
@@ -15,9 +15,9 @@ namespace Net.DDP.Client
             this._client = client;
         }
 
-        public void Connect(string url)
+        public void Connect(string url, bool useSSL = true)
         {
-            _url = "wss://" + url + "/websocket";
+            _url = string.Format("{0}://{1}/websocket", useSSL ? "wss" : "ws", url);
             _socket = new WebSocket(_url);
             _socket.MessageReceived += socket_MessageReceived;
             _socket.Opened += _socket_Opened;
