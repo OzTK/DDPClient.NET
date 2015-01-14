@@ -2,15 +2,17 @@
 <package >
   <metadata>
     <id>DDPClient.Net</id>
-    <version>0.3.1</version>
+    <version>0.4</version>
     <title>DDPClient.Net</title>
-    <authors>Paul Duguet</authors>
+    <authors>Paul Duguet, Sony Arouje, David Cornish</authors>
     <owners></owners>
     <description>
       DDP client library for .NET for use with Meteor's ddp protocol. Still in an early version and allowing only basic subscriptions and calls. This project was originally started by Sony Arouje : https://github.com/sonyarouje/DDPClient.NET
     </description>
     <releaseNotes>
-      Methods Call and Subscribe of IClient can now be used with params string array
+      * SSL optional on websockets (for dev mode)
+      * Method call with 'object' type parameters (not only 'string' as before)
+      * Added support for 'remove' message
     </releaseNotes>
     <summary>
       DDP client library for .NET
@@ -27,7 +29,7 @@
         </group>
     </dependencies>
     <references></references>
-    <tags>DDP DDPClient Meteor</tags>
+    <tags>DDP DDPClient Meteor Meteorite</tags>
   </metadata>
   <files>
     <file src="lib\" target="lib" />
