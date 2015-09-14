@@ -24,6 +24,10 @@ namespace Net.DDP.Client
             _socket.Open();
             _isWait = 1;
             this.Wait();
+            if (_socket.State != WebSocketState.Open)
+            {
+                throw new SocketException();
+            }
         }
 
         public void Close()
@@ -49,7 +53,7 @@ namespace Net.DDP.Client
 
         private void Wait()
         {
-            while (_isWait != 0)
+            while (_isWait != 0 && _socket.State == WebSocketState.Connecting)
             {
                 System.Threading.Thread.Sleep(100);
             }
