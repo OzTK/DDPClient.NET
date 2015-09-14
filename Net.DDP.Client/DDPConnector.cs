@@ -1,5 +1,6 @@
 ﻿using System;
 using WebSocket4Net;
+using System.Net.Sockets;
 
 namespace Net.DDP.Client
 {
