@@ -8,6 +8,8 @@
         Removed,
         Error,
         Connected,
-        MethodResult
+        MethodResult,
+		Updated,
+		Failed
     }
 }

@@ -9,6 +9,10 @@ namespace Net.DDP.Client
         public const string DDP_MESSAGE_TYPE_CHANGED = "changed";
         public const string DDP_MESSAGE_TYPE_NOSUB = "nosub";
         public const string DDP_MESSAGE_TYPE_REMOVED = "removed";
+		public const string DDP_MESSAGE_TYPE_RESULT = "result";
+		public const string DDP_MESSAGE_TYPE_UPDATED = "updated";
+		public const string DDP_MESSAGE_TYPE_CONNECTED = "connected";
+		public const string DDP_MESSAGE_TYPE_FAILED = "failed";
 
         public const string DDP_PROPS_MESSAGE = "msg";
         public const string DDP_PROPS_ID = "id";
@@ -18,6 +22,8 @@ namespace Net.DDP.Client
         public const string DDP_PROPS_RESULT = "result";
         public const string DDP_PROPS_ERROR = "error";
         public const string DDP_PROPS_SUBS = "subs";
+		public const string DDP_PROPS_METHODS = "methods";
+		public const string DDP_PROPS_VERSION = "version";
 
         private readonly DDPConnector _connector;
         private int _uniqueId;
